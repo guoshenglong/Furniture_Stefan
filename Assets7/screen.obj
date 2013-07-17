@@ -1,0 +1,15 @@
+# Blender v2.61 (sub 4) OBJ File: 'tv01.blend'
+# www.blender.org
+mtllib screen.mtl
+o Plane.004_Plane.005
+v 1.600000 2.000000 0.140000
+v 1.600000 0.200000 0.140000
+v -1.600000 0.200000 0.140000
+v -1.600000 2.000000 0.140000
+vt 0.690200 1.000000
+vt 0.000000 1.000000
+vt 0.000000 0.435300
+vt 0.690200 0.435300
+usemtl Screen_untitled
+s off
+f 1/1 4/2 3/3 2/4

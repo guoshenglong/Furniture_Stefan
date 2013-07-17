@@ -1,0 +1,227 @@
+<?xml version="1.0" ?>
+<!--	Sample geolocation tracking configuration file for using the cell phone as a compass. 
+		This application is based on the LLA coordination system with LLA stands for latitude, 
+		longitude and altitude respectively.
+		The mobileSDK is fully capable of using the geo location data collected by the mobile
+		device which include the coordinates and the orientation. It should be noted that the 
+		altitude part of the data is ignored by the mobile SDK.
+		The point of interest (POI) is shown in a billboard. And customerized billboards can 
+		be added by the user.
+		-->
+<TrackingData>
+    <Sensors>
+	
+	<!--	use GPSCompassSensorSource as the sensor type is geo location is used in the app -->
+        <Sensor type="GPSCompassSensorSource">
+		
+		    <!--	Assign an ID to this sensor -->
+            <SensorID>Android</SensorID>			
+            <Parameters />
+			
+			<!--	Define a "SensorCOS" for this sensor. This is essentially a 
+					coordinate system associated with a template image that is 
+					to be tracked. -->
+            <SensorCOS>
+			
+			    <!--	An ID that this COS is associated with. -->
+                <SensorCosID>Android1</SensorCosID>
+            </SensorCOS>
+        </Sensor>
+    </Sensors>
+	
+	<!--	Connections between SensorCOS and COS entities are defined here. 
+			While the SensorCOS represents the pose of the tracked object 
+			relative to the sensor, the COS is the pose that will be used when
+			augmenting objects. The COS is computed from the SensorCOS by 
+			performing additional processing steps: 
+			- A fuser can be used to smooth motion, and also to predict motion 
+			  in case of missing sensor readings. 
+			- A rigid transformation can be applied. The model to be augmented 
+			  can be shifted and rotated against a SensorCOS. 
+			- A hand-eye calibration can be applied. 
+			-->
+    <Connections>
+        <COS>
+		
+		    <!--	A descriptive name for this COS. -->
+            <Name>GPSCos1</Name>
+			
+			<!--	Which type of Fuser to use. Here, we use the 
+					"SmoothingFuser", which applies smoothing in order to predict 
+					movement and handle noise. 
+					-->
+			<Fuser type="SmoothingFuser">
+				<Parameters>
+					<!--	Number of frames in which the tracker will continue 
+							predicting the pose when interframe tracking 
+							fails. After the specified number of frames, the 
+							tracker will stop predicting. 
+							This parameter is for expert usage only. In general 
+							it is advised to leave the value unchanged. -->
+					<KeepPoseForNumberOfFrames>2</KeepPoseForNumberOfFrames>
+					
+					<!--	If the tracking device is equipped with an inertial 
+							sensor that can measure gravity, the sensor's 
+							measurement is used to improve the pose 
+							estimate. To activate this option, the value of 
+							this tag must be set to "ReplaceZAxis". 
+							This parameter is for expert usage only. In general 
+							it is advised to leave the value unchanged. -->
+					<GravityAssistance></GravityAssistance>
+					
+					<!--	Data (position) smoothing factor for double 
+							exponential smoothing of translation. This value 
+							should be high if measures are expected to be 
+							accurate and low otherwise. A high value assigns a 
+							higher weight to a new measurement. Typically, the 
+							accuracy of translation estimates is rather 
+							high, so we set the smoothing factor to 0.8. The 
+							default value is 0.5. 
+							This parameter is for expert usage only. In general 
+							it is advised to leave the value unchanged. -->
+					<AlphaTranslation>0.9</AlphaTranslation>
+					
+					<!--	Trend (velocity) smoothing factor for double 
+							exponential smoothing of translation. This value 
+							should be high if measures are expected to be 
+							accurate and low otherwise. With the same 
+							reasoning as above, we set the smoothing factor to 
+							0.8. The default value is 0.5. 
+							This parameter is for expert usage only. In general 
+							it is advised to leave the value unchanged. -->
+					<GammaTranslation>0.8</GammaTranslation>
+
+					<!--	Data (position) smoothing factor for double 
+							exponential smoothing of rotation. Rotation 
+							measurements are typically not as accurate as 
+							translation measurements, so we use a value of 0.5.
+							This parameter is for expert usage only. In general 
+							it is advised to leave the value unchanged. -->
+					<AlphaRotation>0.7</AlphaRotation>
+	
+					<!--	Trend (velocity) smoothing factor for double 
+							exponential smoothing of rotation. With the same
+							reasoning as for AlphaRotation above, we set this 
+							value to 0.5. 
+							This parameter is for expert usage only. In general 
+							it is advised to leave the value unchanged. -->
+					<GammaRotation>0.5</GammaRotation>
+					
+					<!--	If an orientation sensor is available, the system
+							may try to keep updating the pose based on that 
+							orientation sensor's measurements. If this should
+							be done, then this option must be set to true. The 
+							default value is false. 
+							This parameter is for expert usage only. In general 
+							it is advised to leave the value unchanged. -->
+					<ContinueLostTrackingWithOrientationSensor>false</ContinueLostTrackingWithOrientationSensor>
+				</Parameters>
+			</Fuser>
+            <SensorSource trigger="1">
+			
+				<!--	The Sensor and SensorCOS that we want to use. Note 
+						that these IDs are the same that we have used in the 
+						Sensor definition above. -->
+                <SensorID>Android</SensorID>
+                <SensorCosID>Android1</SensorCosID>
+				
+				<!--	A hand-eye calibration allows to specify the relative 
+						pose between two sensors. In the simple case of having 
+						one camera-based sensor, it is usually not used. It 
+						allows to move the COS "as if" the camera were moved, 
+						and is thus inverse to the COSOffset rigid 
+						transformation that is specified below. -->
+                <HandEyeCalibration>
+				    <!--	The 3D translation vector. -->
+                    <TranslationOffset>
+                        <x>0.0</x>
+                        <y>0.0</y>
+                        <z>0.0</z>
+                    </TranslationOffset>
+					<!--	Rotations are specified via unit quaternions, where 
+							the imaginary parts "X", "Y", "Z" is specified 
+							first, and then the real part "W". --> 
+                    <RotationOffset>
+                        <x>0.0</x>
+                        <y>0.0</y>
+                        <z>0.0</z>
+                        <w>1.0</w>
+                    </RotationOffset>
+                </HandEyeCalibration>
+				
+				<!--	The COSOffset specifies a rigid transformation that 
+						is applied to the SensorCOS. This makes it possible to
+						move the augmented model. It is specified just the same 
+						way as the hand-eye-calibration. -->
+                <COSOffset>
+                    <TranslationOffset>
+                        <x>140.0</x>
+                        <y>140.0</y>
+                        <z>-140.0</z>
+                    </TranslationOffset>
+                    <RotationOffset>
+                        <x>0.0</x>
+                        <y>0.0</y>
+                        <z>0.0</z>
+                        <w>1.0</w>
+                    </RotationOffset>
+                </COSOffset>
+            </SensorSource>
+        </COS>
+		
+		<!--	The commented lines below show how another COS can be added to 
+				the configuration. This can be used together with the 
+				commented-out SensorCOS part in the Sensor definition above to 
+				create another COS. Note however that the robust tracker cannot
+				track multiple objects in parallel, it will always only track 
+				one of the defined objects at the same time. 
+				-->
+		<!--
+		<COS>
+			<Name>MarkerlessCOS2</Name>
+			<Fuser Type="BestQualityFuser">
+				<Parameters>
+					<KeepPoseForNumberOfFrames>2</KeepPoseForNumberOfFrames>
+					<GravityAssistance></GravityAssistance>
+					<AlphaTranslation>0.8</AlphaTranslation>
+					<GammaTranslation>0.8</GammaTranslation>
+					<AlphaRotation>0.5</AlphaRotation>
+					<GammaRotation>0.5</GammaRotation>
+					<ContinueLostTrackingWithOrientationSensor>false</ContinueLostTrackingWithOrientationSensor>
+				</Parameters>
+			</Fuser>
+
+			<SensorSource>
+				<SensorID>FeatureTracking1</SensorID>
+				<SensorCosID>Patch2</SensorCosID>
+				<HandEyeCalibration>
+					<TranslationOffset>
+						<X>0</X>
+						<Y>0</Y>
+						<Z>0</Z>
+					</TranslationOffset>
+					<RotationOffset>
+						<X>0</X>
+						<Y>0</Y>
+						<Z>0</Z>
+						<W>1</W>
+					</RotationOffset>
+				</HandEyeCalibration>
+				<COSOffset>
+					<TranslationOffset>
+						<X>0</X>
+						<Y>0</Y>
+						<Z>0</Z>
+					</TranslationOffset>
+					<RotationOffset>
+						<X>0</X>
+						<Y>0</Y>
+						<Z>0</Z>
+						<W>1</W>
+					</RotationOffset>
+				</COSOffset>
+			</SensorSource>
+		</COS>
+		-->
+    </Connections>
+</TrackingData>
