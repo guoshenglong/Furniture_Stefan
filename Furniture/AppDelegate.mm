@@ -102,7 +102,7 @@
 	
 	LeveyTabBarController *leveyTabBarController = [[LeveyTabBarController alloc] initWithViewControllers:ctrlArr imageArray:imgArr];
 	[leveyTabBarController.tabBar setBackgroundImage:[UIImage imageNamed:@"toolbarBackground.png"]];
-	[leveyTabBarController setTabBarTransparent:YES];
+	[leveyTabBarController setTabBarTransparent:NO];
 	//[self.window addSubview:leveyTabBarController.view];
     //self.window.rootViewController = self.viewController;
     
