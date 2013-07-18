@@ -1,0 +1,19 @@
+# 排除build目录
+build/*
+ 
+# Exclude temp nibs and swap files
+# 排除nib临时文件和交换文件
+*~.nib
+*.swp
+ 
+# 排除OS X的文件夹显示属性目录
+.DS_Store
+ 
+# 排除xcode3 xcode4的用户自定义设置文件
+*.mode1
+*.mode1v3
+*.mode2v3
+*.perspective
+*.perspectivev3
+*.pbxuser
+xcuserdata
